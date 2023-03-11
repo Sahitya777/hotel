@@ -8,7 +8,7 @@ import axios from 'axios'
 export default function edit() {
   const [price, setPrice] = useState(null)
   const [email, setEmail] = useState('');
-  const [roomtype, setRoomtype] = useState('');
+  const [roomType, setRoomtype] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [requestProcessing, setRequestProcessing] = useState(false);
@@ -43,14 +43,31 @@ export default function edit() {
   const editbook = async (e) => {
     e.preventDefault();
     try {
-        let data={roomtype,roomNumber,oldRoom,email,startTime,endTime};
-        await axios.post('/api/editroom',data);
-        Router.push('/history');
+        let data={roomType,roomNumber,oldRoom,email,startTime,endTime};
+        console.log(roomType);
+        if(roomNumber==oldRoom){
+            showErrorNotification('You cannot choose the same room again','Please enter different room number');
+        }else{
+            var st = Date.parse(startTime)
+            var et = Date.parse(endTime)
+            var d = new Date();
+            if (d.getTime() > st || d.getTime() > et ||st==et) {
+              showErrorNotification('Please input the start time and end time correctly', 'The start time or the end time cannot be before the current date and time')
+            }else{
+                if(st>et){
+                    showErrorNotification('Please input the start time and end time correctly', 'The end time should be a date greater than the start time')
+                }else{
+                    await axios.post('/api/editroom',data);
+                    Router.push('/detail');
+
+                }
+            }
+        }
 
 
     } catch (err) {
       console.log(err);
-      showErrorNotification('Authentication error');
+      showErrorNotification('Editing error',err.response.data.description);
 
     }
   }
@@ -92,7 +109,6 @@ export default function edit() {
                 name="room"
                 id="room"
                 className="w-full px-4 py-2 rounded-md bg-gray-100 border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white focus:border-transparent"
-                placeholder='Email'
                 required
                 value={oldRoom}
                 onChange={handleOldRoomNumber}
@@ -108,7 +124,7 @@ export default function edit() {
                 <option value='C'>Type C 50INR/hour</option>
               </select>
             </div>
-            {roomtype == 'A' && <div className='mb-4'>
+            {roomType == 'A' && <div className='mb-4'>
               <label className="block text-gray-700 font-semibold mb-2">
                 Select Room type
               </label>
@@ -117,7 +133,7 @@ export default function edit() {
                 <option value='102'>Room No. 102</option>
               </select>
             </div>}
-            {roomtype == 'B' && <div className='mb-4'>
+            {roomType == 'B' && <div className='mb-4'>
               <label className="block text-gray-700 font-semibold mb-2">
                 Select Room type
               </label>
@@ -127,7 +143,7 @@ export default function edit() {
                 <option value='203'>Room No. 203</option>
               </select>
             </div>}
-            {roomtype == 'C' && <div className='mb-4'>
+            {roomType == 'C' && <div className='mb-4'>
               <label className="block text-gray-700 font-semibold mb-2">
                 Select Room type
               </label>
@@ -159,8 +175,6 @@ export default function edit() {
               </label>
               <input
                 type="datetime-local"
-                name="email"
-                id="email"
                 className="w-full px-4 py-2 rounded-md bg-gray-100 border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white focus:border-transparent"
                 value={endTime}
                 onChange={handleEndTimeChange}

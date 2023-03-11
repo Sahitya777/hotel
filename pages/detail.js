@@ -10,7 +10,7 @@ const detail = () => {
         try{
             let data = { email: email, roomType: roomType, roomNumber: roomNumber, startTime: startTime, endTime: endTime, price: price };
             await axios.post('/api/rooms',data)
-            router.push('/history');
+            router.push('/');
         }catch(err){
             console.log(err);
         }

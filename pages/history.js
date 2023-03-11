@@ -1,13 +1,7 @@
 import React from 'react'
 import NavBar from '../components/Navbar'
-import axios from 'axios'
-import Room from '../schemas/room'
-const history = async() => {
-    try{
 
-    }catch(err){
-        console.log(err)
-    }
+const history = () => {
   return (
         <div>
             <NavBar/>
