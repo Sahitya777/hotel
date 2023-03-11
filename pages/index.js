@@ -55,7 +55,13 @@ export default function Home() {
         if (st > et) {
           showErrorNotification('Please input the start time and end time correctly', 'The end time should be a date greater than the start time')
         } else {
-          var payment = getPrice(getHours(et, st), 100)
+          if(roomtype=='A'){
+            var payment = getPrice(getHours(et, st), 100)
+          }else if(roomtype=='B'){
+            var payment = getPrice(getHours(et, st), 80)
+          }else{
+            var payment = getPrice(getHours(et, st), 50)
+          }
           setRequestProcessing(false);
           Router.push(`/detail?email=${email}&roomType=${roomtype}&roomNumber=${roomNumber}&startTime=${startTime}&endTime=${endTime}&price=${payment}`);
         }

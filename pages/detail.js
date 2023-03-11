@@ -38,7 +38,7 @@ const detail = () => {
 
             <div class="flex items-center justify-between">
               <span class="text-3xl font-bold text-gray-900 dark:text-white">
-                    ${price}
+              ₹{price}
               </span>
               <a
                 onClick={book}
