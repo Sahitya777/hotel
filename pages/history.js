@@ -1,7 +1,24 @@
 import React from 'react'
 import NavBar from '../components/Navbar'
+import axios from 'axios'
 
 const history = () => {
+
+    async function load(){
+
+        try{
+            const response=await axios.get('/api/history')
+            const finaldata=response.data;
+            
+    
+    
+        }catch(err){
+            console.log(err);
+    
+        }
+    }
+    load();
+
   return (
         <div>
             <NavBar/>
