@@ -3,7 +3,6 @@ import { Button, Select } from '@mantine/core'
 import { useState } from 'react'
 import showErrorNotification from '../lib/notifications/error';
 import { useRouter } from 'next/router'
-import axios from 'axios'
 
 export default function Home() {
   const [price, setPrice] = useState(null)
@@ -55,11 +54,11 @@ export default function Home() {
         if (st > et) {
           showErrorNotification('Please input the start time and end time correctly', 'The end time should be a date greater than the start time')
         } else {
-          if(roomtype=='A'){
+          if (roomtype == 'A') {
             var payment = getPrice(getHours(et, st), 100)
-          }else if(roomtype=='B'){
+          } else if (roomtype == 'B') {
             var payment = getPrice(getHours(et, st), 80)
-          }else{
+          } else {
             var payment = getPrice(getHours(et, st), 50)
           }
           setRequestProcessing(false);

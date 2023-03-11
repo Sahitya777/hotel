@@ -14,15 +14,15 @@ function MyApp({ Component, pageProps }) {
       xl: 30
     }
   }
-  return(
+  return (
     <MantineProvider theme={defaultTheme}>
       <ModalsProvider>
-      <Notifications />
-          <Component {...pageProps} />
+        <Notifications />
+        <Component {...pageProps} />
 
 
       </ModalsProvider>
-  </MantineProvider>
+    </MantineProvider>
   )
 }
 
