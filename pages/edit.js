@@ -5,7 +5,7 @@ import showErrorNotification from '../lib/notifications/error';
 import { useRouter } from 'next/router'
 import axios from 'axios'
 
-export default function Home() {
+export default function edit() {
   const [price, setPrice] = useState(null)
   const [email, setEmail] = useState('');
   const [roomtype, setRoomtype] = useState('');
@@ -13,13 +13,10 @@ export default function Home() {
   const [endTime, setEndTime] = useState('');
   const [requestProcessing, setRequestProcessing] = useState(false);
   const [roomNumber, setRoomNumber] = useState("");
+  const [oldRoom, setOldRoom] = useState(null);
   const Router = useRouter();
 
-  const getHours = (d1, d2) => {
-    var diff = (d2 - d1) / 1000;
-    diff /= (60 * 60);
-    return Math.abs(Math.round(diff));
-  }
+
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value)
@@ -38,28 +35,18 @@ export default function Home() {
   const handleEndTimeChange = (event) => {
     setEndTime(event.target.value)
   }
-
-  const getPrice = (hours, pay) => {
-    return pay * hours;
+  const handleOldRoomNumber = (event) => {
+    setOldRoom(event.target.value)
   }
 
-  const book = async (e) => {
+
+  const editbook = async (e) => {
     e.preventDefault();
     try {
-      var st = Date.parse(startTime)
-      var et = Date.parse(endTime)
-      var d = new Date();
-      if (d.getTime() > st || d.getTime() > et) {
-        showErrorNotification('Please input the start time and end time correctly', 'The start time or the end time cannot be before the current date and time')
-      } else {
-        if (st > et) {
-          showErrorNotification('Please input the start time and end time correctly', 'The end time should be a date greater than the start time')
-        } else {
-          var payment = getPrice(getHours(et, st), 100)
-          setRequestProcessing(false);
-          Router.push(`/detail?email=${email}&roomType=${roomtype}&roomNumber=${roomNumber}&startTime=${startTime}&endTime=${endTime}&price=${payment}`);
-        }
-      }
+        let data={roomtype,roomNumber,oldRoom,email,startTime,endTime};
+        await axios.post('/api/editroom',data);
+        Router.push('/history');
+
 
     } catch (err) {
       console.log(err);
@@ -73,8 +60,15 @@ export default function Home() {
       <Navbar />
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-400 to-purple-500">
         <div className="w-full max-w-md p-8 bg-white rounded-md shadow-lg">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-6">Select Room</h2>
-          <form onSubmit={book}>
+        <div className="mx-auto max-w-2xl text-center mb-5">
+      <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+        EditBooking
+      </h2>
+      <p className="mt-2 text-lg leading-8 text-gray-600">
+        ✎ Update Your Hotel Booking Details Here ✎
+      </p>
+    </div>
+          <form onSubmit={editbook}>
             <div className="mb-4">
               <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">
                 Email Address
@@ -84,17 +78,31 @@ export default function Home() {
                 name="email"
                 id="email"
                 className="w-full px-4 py-2 rounded-md bg-gray-100 border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white focus:border-transparent"
-                required
                 placeholder='Email'
                 value={email}
                 onChange={handleEmailChange}
+              />
+            </div>
+            <div className="mb-4">
+              <label  className="block text-gray-700 font-semibold mb-2">
+                Old Room Number
+              </label>
+              <input
+                type="number"
+                name="room"
+                id="room"
+                className="w-full px-4 py-2 rounded-md bg-gray-100 border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white focus:border-transparent"
+                placeholder='Email'
+                required
+                value={oldRoom}
+                onChange={handleOldRoomNumber}
               />
             </div>
             <div className='mb-4'>
               <label className="block text-gray-700 font-semibold mb-2">
                 Select Room type
               </label>
-              <select class=" w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" onChange={handleRoomTypeChange} required>
+              <select class=" w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" onChange={handleRoomTypeChange} >
                 <option value='A'>Type A 100INR/hour </option>
                 <option value='B'>Type B 80INR/hour</option>
                 <option value='C'>Type C 50INR/hour</option>
@@ -104,7 +112,7 @@ export default function Home() {
               <label className="block text-gray-700 font-semibold mb-2">
                 Select Room type
               </label>
-              <select class=" w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" onChange={handleRoomNumberChange} required>
+              <select class=" w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" onChange={handleRoomNumberChange} >
                 <option value='101'>Room No. 101</option>
                 <option value='102'>Room No. 102</option>
               </select>
@@ -113,7 +121,7 @@ export default function Home() {
               <label className="block text-gray-700 font-semibold mb-2">
                 Select Room type
               </label>
-              <select class=" w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" onChange={handleRoomNumberChange} required>
+              <select class=" w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" onChange={handleRoomNumberChange} >
                 <option value='201'>Room No. 201</option>
                 <option value='202'>Room No. 202</option>
                 <option value='203'>Room No. 203</option>
@@ -141,7 +149,6 @@ export default function Home() {
                 name="date"
                 id="date"
                 className="w-full px-4 py-2 rounded-md bg-gray-100 border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white focus:border-transparent"
-                required
                 value={startTime}
                 onChange={handleStartTimeChange}
               />
@@ -155,7 +162,6 @@ export default function Home() {
                 name="email"
                 id="email"
                 className="w-full px-4 py-2 rounded-md bg-gray-100 border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white focus:border-transparent"
-                required
                 value={endTime}
                 onChange={handleEndTimeChange}
               />
