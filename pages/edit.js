@@ -58,8 +58,8 @@ export default function edit() {
                         showErrorNotification('Please input the start time and end time correctly', 'The end time should be a date greater than the start time')
                     } else {
                         await axios.post('/api/editroom', data);
-                        Router.push('/detail');
-
+                        console.log('ara hai')
+                        Router.push('/history');
                     }
                 }
             }
@@ -184,7 +184,7 @@ export default function edit() {
                             type="submit"
                             className="w-full px-4 py-2 rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-blue-600"
                         >
-                            Checkout Details
+                            Edit Bookings
                         </Button>
 
                     </form>

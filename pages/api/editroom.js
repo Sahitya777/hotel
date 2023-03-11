@@ -20,6 +20,7 @@ export default async function handler(req, res) {
     } else {
         if (email) {
             const updateroom = await Room.findOneAndUpdate({ roomNumber: oldRoom }, { email: email });
+            
         }
         if (startTime && endTime) {
             const updateroom = await Room.findOneAndUpdate({ roomNumber: oldRoom }, { startTime: startTime });
@@ -66,6 +67,7 @@ export default async function handler(req, res) {
                 metadata: {}
             });
         }
+        return res.status(200).send();
     }
 
 }

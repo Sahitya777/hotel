@@ -11,12 +11,12 @@ const detail = () => {
         try {
             let data = { email: email, roomType: roomType, roomNumber: roomNumber, startTime: startTime, endTime: endTime, price: price };
             await axios.post('/api/rooms', data)
-            router.push('/');
+            router.push('/history');
         } catch (err) {
             console.log(err);
         }
     }
-    
+
     return (
         <div>
             <NavBar />
